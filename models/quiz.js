@@ -10,7 +10,7 @@ const questionSchema = new Schema({
 
 const QuizSchema = new Schema({
   name: String,
-  user: { type: Schema.Types.ObjectId, ref: 'user'},
+  user: { type: Schema.Types.ObjectId, ref: 'user' },
   category: String,
   questions: [questionSchema],
 });
