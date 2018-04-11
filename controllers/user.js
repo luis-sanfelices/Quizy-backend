@@ -2,6 +2,8 @@ const User = require('../models/user');
 
 const userController = {
   searchUsers(req, res, next) {
+    User.find({})
+      .then(user => res.status(200).json(user));
     /* Quiz.create({
       name: req.body.name,
       category: req.body.category,
@@ -14,21 +16,24 @@ const userController = {
       .catch((err) => {
         next(err);
       }); */
+    next();
   },
-  // createQuestion
-  createQuestion(req, res, next) {
-    const newQuestion = {
-      question: req.body.question,
-      correct_answer: req.body.correct_answer,
-      incorrect_answers: req.body.incorrect_answers,
-    };
-    Quiz.findOneAndUpdate({ _id: req.params.quizId }, { $push: { questions: newQuestion } })
-      .then((quiz) => {
-        res.status(200).json(quiz);
-      })
-      .catch((err) => {
-        next(err);
-      });
+  searchUserById(req, res, next) {
+    const { id } = req.params;
+    User.findById(id)
+      .then(user => res.status(200).json(user))
+      .catch(err => next(err));
+  },
+  updateUser(req, res, next) {
+    const { id } = req.params;
+    const { email, firstName, lastName } = req.body;
+    User.findByIdAndUpdate(
+      id,
+      { $set: { email, firstName, lastName } },
+      { new: true },
+    )
+      .then(user => res.status(200).json(user))
+      .catch(err => next(err));
   },
 };
 
