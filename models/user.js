@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const pictureSchema = new Schema({
-  name: String,
   pic_path: String,
   pic_name: String,
 });
