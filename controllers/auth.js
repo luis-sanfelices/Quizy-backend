@@ -26,7 +26,12 @@ const authController = {
             const token = jwt.sign({ id: user.id }, process.env.SECRETJWT, {
               expiresIn: 86400, // expires in 24 hours
             });
-            res.status(200).json({ token, expiresIn: 86400, ui: user.id });
+            res.status(200).json({
+              auth: true,
+              token,
+              expiresIn: 86400,
+              ui: user.id,
+            });
           })
           .catch((err) => {
             next(err);
@@ -50,7 +55,12 @@ const authController = {
           const token = jwt.sign({ id: user.id }, process.env.SECRETJWT, {
             expiresIn: 86400, // expires in 24 hours
           });
-          res.status(200).json({ token, expiresIn: 86400, ui: user.id });
+          res.status(200).json({
+            auth: true,
+            token,
+            expiresIn: 86400,
+            ui: user.id,
+          });
         } else {
           return res.status(404).json({ error: 'user or password are invalid' });
         }
