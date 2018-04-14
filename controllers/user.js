@@ -21,7 +21,7 @@ const userController = {
     User.findByIdAndUpdate(
       idUser,
       { $set: { email, firstName, lastName } },
-      { new: true },
+      { new: true }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
