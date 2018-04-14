@@ -16,7 +16,7 @@ const middlewares = {
   },
   isCorrectToken() {
     return (req, res, next) => {
-      const token = req.headers.authorization;
+      const token = req.headers.Authorization;
       if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
       jwt.verify(token, process.env.SECRETJWT, (err, decoded) => {
         if (err) return res.status(401).send({ auth: false, message: 'Invalid token.' });

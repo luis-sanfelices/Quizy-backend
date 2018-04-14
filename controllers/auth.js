@@ -9,12 +9,12 @@ const authController = {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(422).json({ error: 'Must provide a username and password' });
+      return res.status(422).json({ message: 'Must provide a username and password' });
     }
     return User.findOne({ username }, 'username')
       .then((userExists) => {
         if (userExists) {
-          return res.status(422).json({ error: 'user already exist' });
+          return res.status(422).json({ message: 'User already exists' });
         }
         const hashedPassword = bcrypt.hashSync(req.body.password, 8);
         User.create({
@@ -43,13 +43,13 @@ const authController = {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(422).json({ error: 'Must provide a username and password' });
+      return res.status(422).json({ message: 'Must provide a username and password' });
     }
 
     return User.findOne({ username })
       .then((user) => {
         if (!user) {
-          return res.status(404).json({ error: 'user or password are invalid' });
+          return res.status(404).json({ message: 'User or password are invalid' });
         }
         if (bcrypt.compareSync(password, user.password)) {
           const token = jwt.sign({ id: user.id }, process.env.SECRETJWT, {
@@ -62,7 +62,7 @@ const authController = {
             ui: user.id,
           });
         } else {
-          return res.status(404).json({ error: 'user or password are invalid' });
+          return res.status(404).json({ message: 'User or password are invalid' });
         }
       })
       .catch(next);
