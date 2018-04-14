@@ -11,7 +11,7 @@ const userController = {
   },
   searchUserById(req, res, next) {
     const { idUser } = req.params;
-    User.findById(idUser)
+    User.findById(idUser, 'username lastName firstName')
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
   },
