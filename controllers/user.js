@@ -28,7 +28,7 @@ const userController = {
   },
   uploadAvatar(req, res, next) {
     const { idUser } = req.params;
-    const { filename } = req.body.file;
+    const { filename } = req.file;
     User.findByIdAndUpdate(
       idUser,
       { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
@@ -39,7 +39,7 @@ const userController = {
   },
   deleteAvatar(req, res, next) {
     const { idUser } = req.params;
-    const { filename } = req.body.file;
+    const { filename } = req.file;
     User.findByIdAndUpdate(
       idUser,
       { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
