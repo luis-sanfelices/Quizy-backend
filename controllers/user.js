@@ -26,6 +26,28 @@ const userController = {
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
   },
+  uploadAvatar(req, res, next) {
+    const { idUser } = req.params;
+    const { filename } = req.file;
+    User.findByIdAndUpdate(
+      idUser,
+      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
+      { new: true },
+    )
+      .then(user => res.status(200).json(user))
+      .catch(err => next(err));
+  },
+  deleteAvatar(req, res, next) {
+    const { idUser } = req.params;
+    const { filename } = req.file;
+    User.findByIdAndUpdate(
+      idUser,
+      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
+      { new: true },
+    )
+      .then(user => res.status(200).json(user))
+      .catch(err => next(err));
+  },
   getUserFriends(req, res, next) {
     const { idUser } = req.params;
     next();
