@@ -22,6 +22,8 @@ const quizController = {
       correct_answer: req.body.correct_answer,
       incorrect_answers: req.body.incorrect_answers,
     };
+    console.log(newQuestion)
+    console.log(req.params.quizId)
     Quiz.findOneAndUpdate({ _id: req.params.quizId }, { $push: { questions: newQuestion } })
       .then((quiz) => {
         res.status(200).json(quiz);
@@ -30,6 +32,16 @@ const quizController = {
         next(err);
       });
   },
+  getAllQuizes(reqq, res, next) {
+    Quiz.find()
+    .then((quizes) => {
+      console.log(quizes)
+      res.status(200).json(quizes);
+    })
+    .catch((err)=>{
+      next(err);
+    });
+  }
 };
 
 module.exports = quizController;
