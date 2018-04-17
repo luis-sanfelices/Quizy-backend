@@ -32,7 +32,7 @@ const userController = {
     User.findByIdAndUpdate(
       idUser,
       { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
-      { new: true },
+      { new: true }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -43,7 +43,7 @@ const userController = {
     User.findByIdAndUpdate(
       idUser,
       { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
-      { new: true },
+      { new: true }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
