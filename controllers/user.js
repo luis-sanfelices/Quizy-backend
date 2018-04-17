@@ -1,5 +1,6 @@
 const User = require('../models/user');
 
+
 const userController = {
   searchUsers(req, res, next) {
     User.find({ username: new RegExp(req.query.username, 'i') })
@@ -11,7 +12,7 @@ const userController = {
   },
   searchUserById(req, res, next) {
     const { idUser } = req.params;
-    User.findById(idUser, 'username lastName firstName')
+    User.findById(idUser, 'username lastName firstName avatar.pic_path')
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
   },
@@ -29,9 +30,10 @@ const userController = {
   uploadAvatar(req, res, next) {
     const { idUser } = req.params;
     const { filename } = req.file;
+    const host = req.get('host');
     User.findByIdAndUpdate(
       idUser,
-      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
+      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
       { new: true },
     )
       .then(user => res.status(200).json(user))
