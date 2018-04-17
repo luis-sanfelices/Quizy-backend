@@ -32,8 +32,9 @@ const quizController = {
         next(err);
       });
   },
-  getAllQuizes(reqq, res, next) {
-    Quiz.find()
+  getAllQuizes(req, res, next) {
+
+    Quiz.find({},'name user category')
     .then((quizes) => {
       console.log(quizes)
       res.status(200).json(quizes);
@@ -41,7 +42,12 @@ const quizController = {
     .catch((err)=>{
       next(err);
     });
+  },
+  getQuiz(req, res, next) {
+    
   }
+
+
 };
 
 module.exports = quizController;
