@@ -22,7 +22,7 @@ const userController = {
     User.findByIdAndUpdate(
       idUser,
       { $set: { email, firstName, lastName } },
-      { new: true },
+      { new: true }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -33,8 +33,8 @@ const userController = {
     const host = req.get('host');
     User.findByIdAndUpdate(
       idUser,
-      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
-      { new: true },
+      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
+      { new: true }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -45,7 +45,7 @@ const userController = {
     User.findByIdAndUpdate(
       idUser,
       { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
-      { new: true },
+      { new: true }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
