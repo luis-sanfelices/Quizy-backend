@@ -33,7 +33,7 @@ const userController = {
     const host = req.get('host');
     User.findByIdAndUpdate(
       idUser,
-      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
+      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
       { new: true }
     )
       .then(user => res.status(200).json(user))
@@ -41,11 +41,9 @@ const userController = {
   },
   deleteAvatar(req, res, next) {
     const { idUser } = req.params;
-    const { filename } = req.file;
     User.findByIdAndUpdate(
       idUser,
-      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `/uploads/${filename}` } },
-      { new: true }
+      { $set: { avatar: null } }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
