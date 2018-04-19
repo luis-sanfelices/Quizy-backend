@@ -44,7 +44,11 @@ const quizController = {
     });
   },
   getQuiz(req, res, next) {
-    
+    Quiz.findById(req.params.id)
+    .then((quiz) => {
+      console.log(quiz, quiz.response)
+      res.status(200).json(quiz.questions)
+    })
   }
 
 
