@@ -11,11 +11,13 @@ const UserSchema = new Schema({
   username: String,
   password: String,
   email: String,
-  firsName: String,
+  firstName: String,
   lastName: String,
+  age: Number,
   avatar: pictureSchema,
   friends: {
-    user: { type: [Schema.Types.ObjectId], ref: 'user' },
+    type: [Schema.Types.ObjectId],
+    ref: 'user',
   },
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },

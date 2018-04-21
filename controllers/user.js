@@ -12,17 +12,23 @@ const userController = {
   },
   searchUserById(req, res, next) {
     const { idUser } = req.params;
-    User.findById(idUser, 'username lastName firstName avatar.pic_path')
+    User.findById(idUser, 'username email lastName firstName age friends avatar.pic_path')
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
   },
   updateUser(req, res, next) {
     const { idUser } = req.params;
-    const { email, firstName, lastName } = req.body;
+    const {
+      email, firstName, lastName, age,
+    } = req.body;
     User.findByIdAndUpdate(
       idUser,
-      { $set: { email, firstName, lastName } },
-      { new: true }
+      {
+        $set: {
+          email, firstName, lastName, age,
+        },
+      },
+      { new: true },
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -34,7 +40,7 @@ const userController = {
     User.findByIdAndUpdate(
       idUser,
       { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
-      { new: true }
+      { new: true },
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -43,7 +49,7 @@ const userController = {
     const { idUser } = req.params;
     User.findByIdAndUpdate(
       idUser,
-      { $set: { avatar: null } }
+      { $set: { avatar: null } },
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
