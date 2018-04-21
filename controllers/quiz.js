@@ -31,7 +31,7 @@ const quizController = {
       });
   },
   getAllQuizes(req, res, next) {
-    Quiz.find({}, 'name user category rateCount rateValue')
+    Quiz.find({}, 'name user category')
       .then((quizes) => {
         res.status(200).json(quizes);
       })
@@ -40,7 +40,11 @@ const quizController = {
       });
   },
   getQuiz(req, res, next) {
-
+    Quiz.findById(req.params.id)
+      .then((quiz) => {
+        res.status(200).json(quiz.questions);
+      })
+      .catch(err => next(err));
   },
 
 

@@ -6,7 +6,10 @@ const quizRouter = (app) => {
 
   app.put('/api/quiz/:quizId', middlewares.isCorrectToken(), quizController.createQuestion);
 
-  app.get('/api/quiz', middlewares.isCorrectToken(), quizController.getAllQuizes);
+  app.get('/api/quiz/:id', middlewares.isCorrectToken(), quizController.getQuiz);
+
+  app.get('/api/quiz/', middlewares.isCorrectToken(), quizController.getAllQuizes);
+
 };
 
 module.exports = quizRouter;
