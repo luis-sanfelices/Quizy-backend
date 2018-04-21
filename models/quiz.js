@@ -13,6 +13,7 @@ const QuizSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'user' },
   category: String,
   questions: [questionSchema],
+  ranking: [ { user: { type: Schema.Types.ObjectId, ref: 'user' }, score:Number  } ],
 });
 
 const Quiz = mongoose.model('quiz', QuizSchema);
