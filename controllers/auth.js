@@ -26,10 +26,11 @@ const authController = {
             const token = jwt.sign({ id: user.id }, process.env.SECRETJWT, {
               expiresIn: 86400, // expires in 24 hours
             });
+            const decodedToken = jwt.decode(token);
             res.status(200).json({
               auth: true,
               token,
-              expiresIn: 86400,
+              expiresIn: decodedToken.exp,
               ui: user.id,
             });
           })
@@ -55,10 +56,11 @@ const authController = {
           const token = jwt.sign({ id: user.id }, process.env.SECRETJWT, {
             expiresIn: 86400, // expires in 24 hours
           });
+          const decodedToken = jwt.decode(token);
           res.status(200).json({
             auth: true,
             token,
-            expiresIn: 86400,
+            expiresIn: decodedToken.exp,
             ui: user.id,
           });
         } else {
