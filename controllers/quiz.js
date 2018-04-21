@@ -22,8 +22,6 @@ const quizController = {
       correct_answer: req.body.correct_answer,
       incorrect_answers: req.body.incorrect_answers,
     };
-    console.log(newQuestion)
-    console.log(req.params.quizId)
     Quiz.findOneAndUpdate({ _id: req.params.quizId }, { $push: { questions: newQuestion } })
       .then((quiz) => {
         res.status(200).json(quiz);
@@ -33,19 +31,17 @@ const quizController = {
       });
   },
   getAllQuizes(req, res, next) {
-
-    Quiz.find({},'name user category')
-    .then((quizes) => {
-      console.log(quizes)
-      res.status(200).json(quizes);
-    })
-    .catch((err)=>{
-      next(err);
-    });
+    Quiz.find({}, 'name user category rateCount rateValue')
+      .then((quizes) => {
+        res.status(200).json(quizes);
+      })
+      .catch((err) => {
+        next(err);
+      });
   },
   getQuiz(req, res, next) {
-    
-  }
+
+  },
 
 
 };

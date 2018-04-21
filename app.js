@@ -6,6 +6,8 @@ const routes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
 const userRoutes = require('./routes/user');
+const rateRoutes = require('./routes/rate');
+const rankingRoutes = require('./routes/rate');
 const middlewares = require('./helpers/middlewares');
 
 const app = express();
@@ -28,6 +30,8 @@ routes(app);
 authRoutes(app);
 quizRoutes(app);
 userRoutes(app);
+rateRoutes(app);
+rankingRoutes(app);
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');
