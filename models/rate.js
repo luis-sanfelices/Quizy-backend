@@ -13,10 +13,10 @@ const rankingSchema = new Schema({
     ref: 'quiz',
     index: true,
   },
-  rate: Number,
+  rate: { type: Number, default: 0 },
   date: Date,
 });
 
-const Rate = mongoose.model('ranking', rankingSchema);
+const Rate = mongoose.model('rate', rankingSchema);
 
 module.exports = Rate;

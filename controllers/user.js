@@ -1,5 +1,5 @@
 const User = require('../models/user');
-
+const Ranking = require('../models/ranking');
 
 const userController = {
   searchUsers(req, res, next) {
@@ -12,23 +12,47 @@ const userController = {
   },
   searchUserById(req, res, next) {
     const { idUser } = req.params;
+    const response = {};
     User.findById(idUser, 'username email lastName firstName age friends avatar.pic_path')
-      .then(user => res.status(200).json(user))
+      .then(user => user)
+      .then((user) => {
+        Ranking.count({ userId: idUser })
+          .then(points => points)
+          .then((points) => {
+            Ranking.aggregate({ $match: { userId: idUser } }).group({
+              _id: '$userId',
+              markAvg: {
+                $avg: '$result',
+              },
+            })
+              .then((avg) => {
+                response.username = user.username;
+                response.firstName = user.firstName;
+                response.lastName = user.lastName;
+                response.age = user.age;
+                response.email = user.email;
+                response.avatar = user.avatar;
+                response.markAvg = avg[0].markAvg;
+                response.userPoints = points * 10;
+                res.status(200).json(response);
+              });
+          });
+      })
       .catch(err => next(err));
   },
   updateUser(req, res, next) {
     const { idUser } = req.params;
     const {
-      email, firstName, lastName, age
+      email, firstName, lastName, age,
     } = req.body;
     User.findByIdAndUpdate(
       idUser,
       {
         $set: {
-          email, firstName, lastName, age
+          email, firstName, lastName, age,
         },
       },
-      { new: true }
+      { new: true },
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -40,7 +64,7 @@ const userController = {
     User.findByIdAndUpdate(
       idUser,
       { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
-      { new: true }
+      { new: true },
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -49,7 +73,7 @@ const userController = {
     const { idUser } = req.params;
     User.findByIdAndUpdate(
       idUser,
-      { $set: { avatar: null } }
+      { $set: { avatar: null } },
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));

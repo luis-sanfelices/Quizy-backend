@@ -42,7 +42,7 @@ const quizController = {
   getQuiz(req, res, next) {
     Quiz.findById(req.params.id)
       .then((quiz) => {
-        res.status(200).json(quiz.questions);
+        res.status(200).json(quiz);
       })
       .catch(err => next(err));
   },

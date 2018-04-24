@@ -13,7 +13,11 @@ const rankingSchema = new Schema({
     ref: 'quiz',
     index: true,
   },
-  result: Number,
+  category: {
+    type: String,
+    index: true,
+  },
+  result: { type: Number, default: 0 },
   date: Date,
 });
 

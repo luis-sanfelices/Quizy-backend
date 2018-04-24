@@ -7,7 +7,7 @@ const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
 const userRoutes = require('./routes/user');
 const rateRoutes = require('./routes/rate');
-const rankingRoutes = require('./routes/rate');
+const rankingRoutes = require('./routes/ranking');
 const middlewares = require('./helpers/middlewares');
 
 const app = express();
