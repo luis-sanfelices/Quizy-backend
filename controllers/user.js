@@ -25,16 +25,25 @@ const userController = {
                 $avg: '$result',
               },
             })
+              .then(avg => avg)
               .then((avg) => {
-                response.username = user.username;
-                response.firstName = user.firstName;
-                response.lastName = user.lastName;
-                response.age = user.age;
-                response.email = user.email;
-                response.avatar = user.avatar;
-                response.markAvg = avg[0].markAvg;
-                response.userPoints = points * 10;
-                res.status(200).json(response);
+                Ranking.aggregate({ $match: { userId: idUser } }).group({
+                  _id: '$category',
+                  count: { $sum: 10 },
+                })
+                  .then((categoryPoints) => {
+                    response.username = user.username;
+                    response.firstName = user.firstName;
+                    response.lastName = user.lastName;
+                    response.friends = user.friends;
+                    response.age = user.age;
+                    response.email = user.email;
+                    response.avatar = user.avatar;
+                    response.markAvg = avg[0].markAvg;
+                    response.userPoints = points * 10;
+                    response.categoryPoints = categoryPoints;
+                    res.status(200).json(response);
+                  });
               });
           });
       })
