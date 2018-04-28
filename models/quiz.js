@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
+const pictureSchema = new Schema({
+  pic_path: String,
+  pic_name: String,
+});
+
 const questionSchema = new Schema({
   question: String,
   correct_answer: String,
@@ -15,8 +20,15 @@ const QuizSchema = new Schema({
   questions: [questionSchema],
   rateCount: Number,
   rateValue: Number,
+  picture: pictureSchema,
 });
 
+QuizSchema.virtual('rating').get(function() {
+  return this.rateValue ? (this.rateValue / this.rateCount).toFixed(1) : null;
+});
+
+
+QuizSchema.set('toObject', { getters: true });
 const Quiz = mongoose.model('quiz', QuizSchema);
 
 module.exports = Quiz;
