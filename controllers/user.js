@@ -1,12 +1,13 @@
+const fs = require('fs');
 const User = require('../models/user');
 const Ranking = require('../models/ranking');
 
 const userController = {
   searchUsers(req, res, next) {
     User.find({ username: new RegExp(req.query.username, 'i') })
+      .limit(10)
       .then((users) => {
-        const userIds = users.map(user => user.id);
-        return res.status(200).json(userIds);
+        return res.status(200).json(users);
       })
       .catch(err => next(err));
   },
@@ -70,21 +71,17 @@ const userController = {
     const { idUser } = req.params;
     const { filename } = req.file;
     const host = req.get('host');
-    User.findByIdAndUpdate(
-      idUser,
-      { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
-      { new: true }
-    )
-      .then(user => res.status(200).json(user))
-      .catch(err => next(err));
-  },
-  deleteAvatar(req, res, next) {
-    const { idUser } = req.params;
-    User.findByIdAndUpdate(
-      idUser,
-      { $set: { avatar: null } }
-    )
-      .then(user => res.status(200).json(user))
+    User.findById(idUser)
+      .then((previousUser) => {
+        fs.unlinkSync(`public/uploads/${previousUser.avatar.pic_name}`);
+        User.findByIdAndUpdate(
+          idUser,
+          { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
+          { new: true }
+        )
+          .then(user => res.status(200).json(user))
+          .catch(error => next(error));
+      })
       .catch(err => next(err));
   },
   getUserFriends(req, res, next) {

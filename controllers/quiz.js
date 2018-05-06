@@ -69,7 +69,7 @@ const quizController = {
     Quiz.findByIdAndUpdate(
       id,
       { $set: { 'picture.pic_name': filename, 'picture.pic_path': `http://${host}/static/uploads/${filename}` } },
-      { new: true },
+      { new: true }
     )
       .then(quiz => res.status(200).json(quiz))
       .catch(err => next(err));
