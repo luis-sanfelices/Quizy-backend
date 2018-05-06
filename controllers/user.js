@@ -30,7 +30,10 @@ const userController = {
               .then((avg) => {
                 Ranking.aggregate({ $match: { userId: idUser } }).group({
                   _id: '$category',
-                  count: { $sum: 10 },
+                  markAvg: {
+                    $avg: '$result',
+                  },
+                  count: { $sum: 1 },
                 })
                   .then((categoryPoints) => {
                     response.username = user.username;
@@ -41,7 +44,7 @@ const userController = {
                     response.email = user.email;
                     response.avatar = user.avatar;
                     response.markAvg = avg[0].markAvg;
-                    response.userPoints = points * 10;
+                    response.userPoints = points * avg[0].markAvg;
                     response.categoryPoints = categoryPoints;
                     res.status(200).json(response);
                   });
@@ -95,6 +98,15 @@ const userController = {
   deleteFriend(req, res, next) {
     const { idUser, idFriend } = req.params;
     next();
+  },
+  getLastQuizesPlayed(req, res, next) {
+    const { idUser } = req.params;
+    Ranking.find({ userId: idUser })
+      .sort({ created_at: -1 })
+      .limit(10)
+      .populate('quizId')
+      .then(quizes => res.status(200).json(quizes))
+      .catch(err => next(err));
   },
 };
 
