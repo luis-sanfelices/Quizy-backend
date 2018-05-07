@@ -1,14 +1,13 @@
 const fs = require('fs');
 const User = require('../models/user');
 const Ranking = require('../models/ranking');
+const Notifications = require('../models/notifications');
 
 const userController = {
   searchUsers(req, res, next) {
     User.find({ username: new RegExp(req.query.username, 'i') })
       .limit(10)
-      .then((users) => {
-        return res.status(200).json(users);
-      })
+      .then(users => res.status(200).json(users))
       .catch(err => next(err));
   },
   searchUserById(req, res, next) {
@@ -87,17 +86,64 @@ const userController = {
       })
       .catch(err => next(err));
   },
-  getUserFriends(req, res, next) {
+  searchUserFriends(req, res, next) {
     const { idUser } = req.params;
-    next();
+    const searchTerm = req.query.username;
+    if (searchTerm) {
+      User.findById(idUser)
+        .then((user) => {
+          User.find({ username: new RegExp(req.query.username, 'i'), _id: { $in: user.friends } })
+            .limit(10)
+            .then(users => res.status(200).json(users))
+            .catch(err => next(err));
+        })
+        .catch(err => next(err));
+    } else {
+      User.findById(idUser)
+        .populate('friends')
+        .limit(10)
+        .then(friends => res.status(200).json(friends))
+        .catch(err => next(err));
+    }
   },
   addFriend(req, res, next) {
     const { idUser } = req.params;
-    next();
+    const { friend } = req.body;
+    User.findByIdAndUpdate(
+      idUser,
+      {
+        $addToSet: { friends: friend },
+      },
+      { new: true },
+    )
+      .then((user) => {
+        Notifications.create({
+          userId: friend,
+          readed: false,
+          notification: {
+            notificationType: 'new friend',
+            fromUser: idUser,
+          },
+        })
+          .then((notification) => {
+            console.log(notification);
+            res.status(200).json(user);
+          })
+          .catch(err => next(err));
+      })
+      .catch(err => next(err));
   },
   deleteFriend(req, res, next) {
     const { idUser, idFriend } = req.params;
-    next();
+    User.findByIdAndUpdate(
+      idUser,
+      {
+        $push: { idFriend },
+      },
+      { new: true },
+    )
+      .then(user => res.status(200).json(user))
+      .catch(err => next(err));
   },
   getLastQuizesPlayed(req, res, next) {
     const { idUser } = req.params;
