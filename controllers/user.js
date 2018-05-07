@@ -44,7 +44,7 @@ const userController = {
                     response.email = user.email;
                     response.avatar = user.avatar;
                     response.markAvg = avg[0].markAvg;
-                    response.userPoints = points * avg[0].markAvg;
+                    response.userPoints = points;
                     response.categoryPoints = categoryPoints;
                     res.status(200).json(response);
                   });
