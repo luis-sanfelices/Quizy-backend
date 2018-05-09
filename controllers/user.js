@@ -2,6 +2,7 @@ const fs = require('fs');
 const User = require('../models/user');
 const Ranking = require('../models/ranking');
 const Notifications = require('../models/notifications');
+const mongoose = require('mongoose');
 
 const userController = {
   searchUsers(req, res, next) {
@@ -19,7 +20,7 @@ const userController = {
         Ranking.count({ userId: idUser })
           .then(points => points)
           .then((points) => {
-            Ranking.aggregate({ $match: { userId: idUser } }).group({
+            Ranking.aggregate().match({ userId: mongoose.Types.ObjectId(idUser) }).group({
               _id: '$userId',
               markAvg: {
                 $avg: '$result',
@@ -27,7 +28,7 @@ const userController = {
             })
               .then(avg => avg)
               .then((avg) => {
-                Ranking.aggregate({ $match: { userId: idUser } }).group({
+                Ranking.aggregate().match({ userId: mongoose.Types.ObjectId(idUser) }).group({
                   _id: '$category',
                   markAvg: {
                     $avg: '$result',
@@ -42,7 +43,7 @@ const userController = {
                     response.age = user.age;
                     response.email = user.email;
                     response.avatar = user.avatar;
-                    response.markAvg = avg[0].markAvg;
+                    response.markAvg = avg[0] ? avg[0].markAvg : 0;
                     response.userPoints = points;
                     response.categoryPoints = categoryPoints;
                     res.status(200).json(response);
@@ -64,7 +65,7 @@ const userController = {
           email, firstName, lastName, age,
         },
       },
-      { new: true }
+      { new: true },
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
@@ -79,7 +80,7 @@ const userController = {
         User.findByIdAndUpdate(
           idUser,
           { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
-          { new: true }
+          { new: true },
         )
           .then(user => res.status(200).json(user))
           .catch(error => next(error));

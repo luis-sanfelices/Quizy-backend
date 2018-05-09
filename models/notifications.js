@@ -8,11 +8,10 @@ const messageNotificationSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user',
   },
-  quizID: {
+  challengeId: {
     type: Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'challenge',
   },
-  category: String,
 });
 
 const notificationSchema = new Schema(
