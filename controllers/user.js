@@ -114,7 +114,7 @@ const userController = {
       {
         $addToSet: { friends: friend },
       },
-      { new: true },
+      { new: true }
     )
       .then((user) => {
         Notifications.create({
@@ -140,7 +140,7 @@ const userController = {
       {
         $push: { idFriend },
       },
-      { new: true },
+      { new: true }
     )
       .then(user => res.status(200).json(user))
       .catch(err => next(err));
