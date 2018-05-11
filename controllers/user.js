@@ -82,7 +82,9 @@ const userController = {
     const host = req.get('host');
     User.findById(idUser)
       .then((previousUser) => {
-        fs.unlinkSync(`public/uploads/${previousUser.avatar.pic_name}`);
+        if (previousUser.avatar) {
+          fs.unlinkSync(`public/uploads/${previousUser.avatar.pic_name}`);
+        }
         User.findByIdAndUpdate(
           idUser,
           { $set: { 'avatar.pic_name': filename, 'avatar.pic_path': `http://${host}/static/uploads/${filename}` } },
