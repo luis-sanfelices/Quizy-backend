@@ -54,6 +54,7 @@ const quizController = {
   },
   getQuiz(req, res, next) {
     Quiz.findById(req.params.id)
+      .populate('user')
       .then((quiz) => {
         res.status(200).json(quiz);
       })
