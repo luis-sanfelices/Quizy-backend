@@ -15,9 +15,8 @@ const categoryQuizController = {
         next(err);
       });
   },
-
   getCategoryQuiz(req, res, next) {
-    Quiz.findById(req.params.id)
+    CategoryQuiz.findById(req.params.id)
       .then((quiz) => {
         res.status(200).json(quiz);
       })

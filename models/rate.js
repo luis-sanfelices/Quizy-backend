@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const rankingSchema = new Schema({
+const rateSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'user',
@@ -18,6 +18,6 @@ const rankingSchema = new Schema({
   date: Date,
 });
 
-const Rate = mongoose.model('rate', rankingSchema);
+const Rate = mongoose.model('rate', rateSchema);
 
 module.exports = Rate;
