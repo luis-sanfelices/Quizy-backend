@@ -15,6 +15,12 @@ const userController = {
     const { idUser } = req.params;
     const response = {};
     User.findById(idUser, 'username email lastName firstName age friends avatar.pic_path')
+      .populate({
+        path: 'friends',
+        options: {
+          limit: 10,
+        },
+      })
       .then(user => user)
       .then((user) => {
         Ranking.count({ userId: idUser })
