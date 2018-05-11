@@ -15,7 +15,6 @@ const quizController = {
         next(err);
       });
   },
-  // createQuestion
   createQuestion(req, res, next) {
     const newQuestion = {
       question: req.body.question,
